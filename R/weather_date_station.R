@@ -66,7 +66,9 @@ weather_date_station=function(date_ymd,station_name,station_id){
     dplyr::mutate(rain=stringr::str_replace(rain,"\\s",""),
                   pressure=stringr::str_replace(pressure,"=","")) %>% 
     dplyr::select(-wind) %>%
-    dplyr::mutate_at(.funs="as.numeric",.vars=dplyr::vars(-timestamp))
+    dplyr::mutate_at(.funs="as.numeric",.vars=dplyr::vars(-timestamp))%>%
+    dplyr::arrange(timestamp)
+    
 
   return(tib_weather)
 }
