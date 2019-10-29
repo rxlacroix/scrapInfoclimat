@@ -17,14 +17,11 @@ weather_period_station=function(date_beginning,
                               station_name,
                               station_id){
   
- period <- seq(lubridate::ymd(date_beginning),
-      lubridate::ymd(date_end),
-      1)
- data <- data.frame()
- for (i in 1:length(period)) {
-   y <- weather_date_station(date=period[i],station_name = station_name, station_id = station_id)
-   data <- rbind(data, y)
-   system('sleep 3')
+   seq(lubridate::ymd(date_beginning),
+       lubridate::ymd(date_end),
+       1) %>%
+      purrr::map_df(weather_date_station,
+                    station_name=station_name,
+                    station_id=station_id)
+   
    }
- return(data)
-}
