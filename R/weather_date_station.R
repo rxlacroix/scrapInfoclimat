@@ -11,13 +11,12 @@
 #'                    station_id="07386")
 weather_date_station=function(date_ymd,station_name,station_id){
   my_url=url_date_station(date_ymd,station_name,station_id)
-  content=my_url %>%
-    xml2::read_html()
-  variables=content %>% 
+  content=polite::bow(my_url, force = TRUE)
+  variables=polite::scrape(content) %>% 
     rvest::html_nodes("thead") %>% 
     rvest::html_nodes("th") %>% 
     rvest::html_text()
-  rows= content %>%
+  rows= polite::scrape(content) %>%
     rvest::html_nodes("tbody") %>% 
     rvest::html_children()%>%
     purrr::map(html_children) %>%
@@ -27,7 +26,7 @@ weather_date_station=function(date_ymd,station_name,station_id){
     purrr::map(as_tibble)  %>% 
     bind_rows() %>% 
     magrittr::set_colnames(variables)
-  date_et_heure=content %>%
+  date_et_heure=polite::scrape(content) %>%
     rvest::html_nodes("tbody") %>% 
     rvest::html_children()%>%
     purrr::map(html_children) %>% 
